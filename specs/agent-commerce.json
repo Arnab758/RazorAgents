@@ -1,0 +1,37 @@
+{
+  "$schema": "https://specs.agentic-commerce.org/v1/acp-manifest.json",
+  "protocol_version": "ACP/1.0",
+  "npci_uap_compatible": true,
+  "ap2_x402_compliant": true,
+  "merchant": {
+    "id": "rzp_merch_cloudgpu_0926",
+    "legal_name": "CloudGPU India Technologies Pvt Ltd",
+    "brand_name": "CloudGPU.ai",
+    "verified_by": "Razorpay KYC & NPCI Directory",
+    "trust_score": 98.4,
+    "vpa": "cloudgpu@razorpay",
+    "settlement_rail": "RAZORPAY_INSTANT_SETTLEMENT",
+    "jurisdiction": "IN"
+  },
+  "capabilities": {
+    "agent_negotiation": true,
+    "ephemeral_tokenized_mandates": true,
+    "dynamic_discount_resolution": true,
+    "partial_fulfillment": false,
+    "instant_crypto_receipt": true
+  },
+  "endpoints": {
+    "catalog": "/.well-known/agent-commerce.json",
+    "negotiate": "/api/negotiate",
+    "vulcan_precheck": "/api/sentinel/evaluate",
+    "execute_checkout": "/api/payments/create-order",
+    "verify_receipt": "/api/payments/verify"
+  },
+  "negotiation_parameters": {
+    "allowed_currencies": ["INR"],
+    "min_transaction_inr": 100,
+    "max_transaction_inr": 500000,
+    "timeout_seconds": 45,
+    "signature_algorithm": "HMAC-SHA256"
+  }
+}

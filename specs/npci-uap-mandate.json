@@ -1,0 +1,28 @@
+{
+  "$schema": "https://npci.org.in/specs/uap/v1/mandate.json",
+  "mandate_id": "mnd_bounded_session_992",
+  "version": "UAP/2026.1",
+  "principal": {
+    "identity": "dev@okaxis",
+    "kyc_status": "VERIFIED_AADHAAR_OTP",
+    "client_agent_id": "agent_claude_uap_01"
+  },
+  "boundaries": {
+    "max_cumulative_inr": 25000,
+    "max_single_transaction_inr": 15000,
+    "allowed_categories": ["cloud_compute", "fintech_api", "ai_tokens"],
+    "allowed_rail": "RAZORPAY_INSTANT_SETTLEMENT",
+    "whitelisted_vpa_suffixes": ["@razorpay", "@icici"]
+  },
+  "cryptographic_delegation": {
+    "key_algorithm": "Ed25519",
+    "issued_at": "2026-09-04T17:30:00Z",
+    "expires_at": "2026-09-04T19:30:00Z",
+    "token_digest": "sha256:4b9a8d7c6b5e4f3a210987654321fedcba0987654321"
+  },
+  "governance": {
+    "require_step_up_if_discount_exceeds_pct": 20,
+    "require_step_up_on_intent_drift_score_below": 80,
+    "firewall_enforcement": "VULCAN_SENTINEL_STRICT"
+  }
+}
