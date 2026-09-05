@@ -1,0 +1,6 @@
+{
+  "name": "RazorAgent OS",
+  "description": "Autonomous Commerce Protocol (ACP), Dual-Agent Dynamic Negotiation, and Vulcan Sentinel Bounded Money Actions for Razorpay",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

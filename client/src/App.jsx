@@ -6,7 +6,9 @@ import MerchantAdmin from './components/MerchantAdmin';
 import MCPHub from './components/MCPHub';
 import AnalyticsView from './components/AnalyticsView';
 import RazorpayModal from './components/RazorpayModal';
-import { ShieldCheck, Zap, Lock, Terminal, CheckCircle2 } from 'lucide-react';
+import GSTInvoiceModal from './components/GSTInvoiceModal';
+import RazorpaySettingsModal from './components/RazorpaySettingsModal';
+import { Lock, CheckCircle2 } from 'lucide-react';
 
 const defaultCatalog = [
   {
@@ -108,6 +110,16 @@ function MainApp() {
   const [merchantDiscountCap, setMerchantDiscountCap] = useState(15);
   const [agentDiscoveryActive, setAgentDiscoveryActive] = useState(true);
 
+  // Advanced Hackathon Modals State
+  const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
+  const [invoiceData, setInvoiceData] = useState(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [razorpayConfig, setRazorpayConfig] = useState({
+    mode: 'LIVE_TEST',
+    keyId: 'rzp_test_51LzV7g3p2x9k',
+    merchantVpa: 'cloudgpu@razorpay'
+  });
+
   const [mandate, setMandate] = useState({
     id: 'mnd_bounded_session_992',
     principal: 'Dev (Authorized Buyer)',
@@ -116,21 +128,6 @@ function MainApp() {
     whitelistedRails: ['RAZORPAY_UAP'],
     validHours: 2.0
   });
-
-  useEffect(() => {
-    // Fetch initial catalog from API
-    fetch('/api/catalog')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && Array.isArray(data.catalog) && data.catalog.length > 0) {
-          setCatalog(data.catalog);
-        }
-      })
-      .catch(err => console.error('Failed to load catalog:', err));
-
-    // Run baseline Sentinel evaluation
-    runSentinelPrecheck(null);
-  }, []);
 
   const runSentinelPrecheck = async (attackType) => {
     try {
@@ -158,6 +155,21 @@ function MainApp() {
       console.error('Sentinel precheck error:', err);
     }
   };
+
+  useEffect(() => {
+    // Fetch initial catalog from API
+    fetch('/api/catalog')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && Array.isArray(data.catalog) && data.catalog.length > 0) {
+          setCatalog(data.catalog);
+        }
+      })
+      .catch(err => console.error('Failed to load catalog:', err));
+
+    // Run baseline Sentinel evaluation
+    runSentinelPrecheck(null);
+  }, []);
 
   const handleSimulateAttack = (attackId) => {
     setActiveAttack(attackId);
@@ -219,7 +231,12 @@ function MainApp() {
       )}
 
       {/* Header Bar */}
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Header 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab}
+        razorpayConfig={razorpayConfig}
+        onOpenSettings={() => setIsSettingsOpen(true)}
+      />
 
       {/* Sub-Header Live Telemetry Bar */}
       <div className="border-b border-slate-800/60 bg-[#090e1a]/70 px-4 lg:px-8 py-2 text-xs">
@@ -268,6 +285,10 @@ function MainApp() {
             onEvaluationUpdate={setEvaluation}
             mandate={mandate}
             setMandate={setMandate}
+            onOpenInvoice={(data) => {
+              setInvoiceData(data);
+              setIsInvoiceOpen(true);
+            }}
           />
         )}
 
@@ -300,7 +321,12 @@ function MainApp() {
         )}
 
         {activeTab === 'analytics' && (
-          <AnalyticsView />
+          <AnalyticsView 
+            onOpenInvoice={(data) => {
+              setInvoiceData(data);
+              setIsInvoiceOpen(true);
+            }}
+          />
         )}
       </main>
 
@@ -310,6 +336,25 @@ function MainApp() {
         onClose={() => setIsRazorpayModalOpen(false)}
         transactionData={pendingTransaction}
         onSettlementComplete={handleSettlementComplete}
+        onOpenInvoice={(data) => {
+          setInvoiceData(data);
+          setIsInvoiceOpen(true);
+        }}
+      />
+
+      {/* Verifiable GST Tax Invoice & Agent Audit Slip Modal */}
+      <GSTInvoiceModal
+        isOpen={isInvoiceOpen}
+        onClose={() => setIsInvoiceOpen(false)}
+        transaction={invoiceData}
+      />
+
+      {/* Inline Razorpay API Credentials & Gateway Mode Selector */}
+      <RazorpaySettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        razorpayConfig={razorpayConfig}
+        setRazorpayConfig={setRazorpayConfig}
       />
 
       {/* Footer */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Store, Globe, CheckCircle2, Shield, Settings2, Code, Copy, ExternalLink, TrendingUp, DollarSign, Bot, Plus, PackagePlus, Sparkles, X, Check } from 'lucide-react';
+import { CheckCircle2, Shield, Settings2, Copy, ExternalLink, TrendingUp, DollarSign, Bot, Plus, PackagePlus, Sparkles, X } from 'lucide-react';
 
 export default function MerchantAdmin({ catalog, discountCap, setDiscountCap, agentDiscoveryActive, setAgentDiscoveryActive, onCatalogUpdated }) {
   const [stats, setStats] = useState(null);
@@ -21,12 +21,6 @@ export default function MerchantAdmin({ catalog, discountCap, setDiscountCap, ag
 
   const manifestUrl = `${window.location.origin}/.well-known/agent-commerce.json`;
 
-  useEffect(() => {
-    fetchStats();
-    const interval = setInterval(fetchStats, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
   const fetchStats = async () => {
     try {
       const res = await fetch('/api/merchant/stats');
@@ -36,6 +30,12 @@ export default function MerchantAdmin({ catalog, discountCap, setDiscountCap, ag
       console.error('Failed to fetch merchant stats:', err);
     }
   };
+
+  useEffect(() => {
+    fetchStats();
+    const interval = setInterval(fetchStats, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const copyManifest = () => {
     navigator.clipboard.writeText(manifestUrl);

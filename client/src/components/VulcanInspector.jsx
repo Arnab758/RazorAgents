@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldAlert, ShieldCheck, AlertTriangle, UserCheck, Lock, Terminal, Activity, Eye } from 'lucide-react';
+import { ShieldAlert, ShieldCheck, AlertTriangle, UserCheck, Terminal, Activity, Eye } from 'lucide-react';
 
 export default function VulcanInspector({
   evaluation,

@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 import { getACPManifest, merchantCatalog, addCatalogItem } from './protocols/acpManifest.js';
 import { razorpayService } from './services/razorpayService.js';
 import { vulcanSentinel } from './services/vulcanSentinel.js';
@@ -10,7 +11,7 @@ import { mcpToolsDefinition } from './protocols/mcpServer.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 3000;
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
@@ -272,7 +273,14 @@ app.get('/api/merchant/stats', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+// 11. Static Client Serving & SPA Fallback
+const clientDist = path.resolve('client/dist');
+app.use(express.static(clientDist));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientDist, 'index.html'));
+});
+
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n========================================================`);
   console.log(`🚀 [RazorAgent OS] Server live at http://localhost:${PORT}`);
   console.log(`🌐 ACP Manifest: http://localhost:${PORT}/.well-known/agent-commerce.json`);

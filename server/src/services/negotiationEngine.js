@@ -8,7 +8,7 @@ dotenv.config();
  * Shared Gemini Invocation Utility with automatic model fallback & retries
  */
 async function callGeminiWithRetry(ai, params, maxRetries = 1, timeoutMs = 8000) {
-  const candidateModels = ['gemini-3.1-flash-lite', 'gemini-3.6-flash'];
+  const candidateModels = ['gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-3.8-flash'];
   let lastErr = null;
 
   for (const modelName of candidateModels) {

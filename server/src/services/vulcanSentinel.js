@@ -166,7 +166,7 @@ OUTPUT IN STRICT JSON ONLY:
 `;
 
         let auditResponse;
-        for (const modelName of ['gemini-3.1-flash-lite', 'gemini-3.6-flash']) {
+        for (const modelName of ['gemini-3.1-flash-lite', 'gemini-flash-latest']) {
           try {
             auditResponse = await this.ai.models.generateContent({
               model: modelName,

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { X, CheckCircle2, ShieldCheck, ArrowRight, Copy, ExternalLink, Lock, CreditCard, Sparkles } from 'lucide-react';
+import { X, CheckCircle2, ShieldCheck, ArrowRight, Copy, CreditCard, FileText } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-export default function RazorpayModal({ isOpen, onClose, transactionData, onSettlementComplete }) {
+export default function RazorpayModal({ isOpen, onClose, transactionData, onSettlementComplete, onOpenInvoice }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [receipt, setReceipt] = useState(null);
   const [copiedHash, setCopiedHash] = useState(false);
@@ -328,12 +328,30 @@ export default function RazorpayModal({ isOpen, onClose, transactionData, onSett
               </p>
             </div>
 
-            <button
-              onClick={onClose}
-              className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs transition-colors cursor-pointer"
-            >
-              Done & Return to Cockpit
-            </button>
+            <div className="flex flex-col gap-2 pt-1">
+              <button
+                onClick={() => {
+                  if (onOpenInvoice) {
+                    onOpenInvoice({
+                      ...receipt,
+                      itemSummary: `${item?.name || 'Cloud Resource'} (Qty: ${transactionData.quantity || 1})`,
+                      amountINR: finalAgreedTotalINR
+                    });
+                  }
+                }}
+                className="w-full py-2.5 px-4 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/70 border border-cyan-500/50 text-cyan-300 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>View Formal GST Tax Invoice & Audit Slip</span>
+              </button>
+
+              <button
+                onClick={onClose}
+                className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs transition-colors cursor-pointer"
+              >
+                Done & Return to Cockpit
+              </button>
+            </div>
           </div>
         )}
 
