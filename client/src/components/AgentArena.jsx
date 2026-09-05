@@ -246,6 +246,7 @@ export default function AgentArena({
   const [typingAgent, setTypingAgent] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isContractGenerating, setIsContractGenerating] = useState(false);
+  const [showTopologyVisualizer, setShowTopologyVisualizer] = useState(true);
   const scrollRef = useRef(null);
 
   // Auto-scroll stream when turns or typing state update
@@ -495,6 +496,42 @@ export default function AgentArena({
 
   return (
     <div className="space-y-6">
+
+      {/* Live Animated Agent Commerce Topology Visualizer */}
+      <div className="rounded-2xl border border-cyan-500/25 bg-[#070b14]/90 p-3 sm:p-4 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+        <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800/80">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span className="flex h-2.5 w-2.5 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
+            </span>
+            <div>
+              <h3 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider font-display flex items-center gap-2">
+                <span>Autonomous Agent Commerce Topology</span>
+                <span className="text-[10px] font-normal px-2 py-0.5 rounded-full font-mono-code bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                  LIVE MOTION
+                </span>
+              </h3>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowTopologyVisualizer(!showTopologyVisualizer)}
+            className="text-[11px] text-slate-400 hover:text-cyan-300 font-mono-code transition-colors cursor-pointer px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800"
+          >
+            {showTopologyVisualizer ? 'Collapse Animation ▲' : 'Expand Live Animation ▼'}
+          </button>
+        </div>
+
+        {showTopologyVisualizer && (
+          <div className="rounded-xl overflow-hidden border border-slate-800/80 bg-slate-950/70 shadow-inner">
+            <img
+              src="/animated-agent-topology.svg"
+              alt="Live Autonomous Agent Commerce Network Animation"
+              className="w-full h-auto max-h-[280px] object-cover object-center"
+            />
+          </div>
+        )}
+      </div>
       
       {/* Judge Showcase: 4 Live Hackathon Scenarios */}
       <div className="p-4 rounded-2xl glass-panel border border-cyan-500/20 bg-gradient-to-r from-blue-950/40 via-slate-900/90 to-purple-950/30 space-y-3">

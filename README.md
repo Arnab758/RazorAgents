@@ -32,6 +32,11 @@ When an autonomous agent attempts to purchase today, it crashes into:
 
 ## 🏛️ Advanced Architectural Overview
 
+<div align="center">
+  <p><b>⚡ Autonomous Agent Commerce Protocol (ACP 1.4) // Dynamic Multi-Agent Topology &amp; Razorpay Highway</b></p>
+  <img src="client/public/animated-agent-topology.svg" width="100%" alt="RazorAgents Autonomous Protocol Network Animated Topology" />
+</div>
+
 ### 1. End-to-End Autonomous Commerce Topology
 
 ```mermaid
@@ -200,6 +205,11 @@ Every RazorAgents merchant serves a standardized machine-readable discovery mani
 
 ## 🛡️ Vulcan Sentinel: 4-Pillar Security & Policy Firewall
 
+<div align="center">
+  <p><b>🛡️ Vulcan Sentinel AI Radar &amp; Bounded Policy Gating Matrix</b></p>
+  <img src="client/public/animated-sentinel-radar.svg" width="100%" alt="Vulcan Sentinel AI Radar Scanner Animation" />
+</div>
+
 Autonomous financial operations require deterministic boundaries. Vulcan Sentinel combines a mathematical gate with an LLM security judge to compute a composite security score:
 
 ```mermaid
@@ -252,6 +262,11 @@ The in-app **MCP Server** tab provides 1-click configuration exporters for:
 ---
 
 ## 🧾 Verifiable Cryptographic Ledger & Indian GST Tax Invoicing
+
+<div align="center">
+  <p><b>💳 Single-Turn Escrow Pipeline, Bounded Settlement &amp; Acoustic Soundbox</b></p>
+  <img src="client/public/animated-settlement-flow.svg" width="100%" alt="Razorpay Instant Settlement Animated Highway" />
+</div>
 
 Every approved transaction is cryptographically signed and auditable:
 
