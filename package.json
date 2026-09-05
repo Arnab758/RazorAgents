@@ -2,15 +2,40 @@
   "name": "razoragent-os",
   "version": "1.0.0",
   "description": "RazorAgent OS - Autonomous Commerce & Bounded Payment Gateway for Razorpay AI Buildathon 2026",
-  "workspaces": [
-    "client",
-    "server"
-  ],
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
-    "build:client": "npm run build --workspace=client",
-    "build": "npm run build:client",
-    "lint": "npm run lint --workspace=client",
-    "dev": "npm run build:client && node server/src/index.js",
-    "start": "node server/src/index.js"
+    "build": "vite build",
+    "gcp-build": "vite build",
+    "lint": "oxlint",
+    "dev": "vite build && tsx server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.21.0",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.0",
+    "autoprefixer": "^10.5.4",
+    "canvas-confetti": "^1.9.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "lucide-react": "^1.41.0",
+    "postcss": "^8.5.28",
+    "razorpay": "^2.9.5",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "recharts": "^3.10.1",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.13",
+    "vite": "^8.2.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "oxlint": "^1.79.0"
   }
 }

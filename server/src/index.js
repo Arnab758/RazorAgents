@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { getACPManifest, merchantCatalog, addCatalogItem } from './protocols/acpManifest.js';
 import { razorpayService } from './services/razorpayService.js';
 import { vulcanSentinel } from './services/vulcanSentinel.js';
@@ -274,16 +275,70 @@ app.get('/api/merchant/stats', (req, res) => {
 });
 
 // 11. Static Client Serving & SPA Fallback
-const clientDist = path.resolve('client/dist');
+const rootDist = path.resolve(process.cwd(), 'dist');
+const clientWorkspaceDist = path.resolve(process.cwd(), 'client/dist');
+const clientDist = fs.existsSync(path.join(rootDist, 'index.html'))
+  ? rootDist
+  : (fs.existsSync(path.join(clientWorkspaceDist, 'index.html')) ? clientWorkspaceDist : rootDist);
+
 app.use(express.static(clientDist));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(clientDist, 'index.html'));
+  const indexPath = path.join(clientDist, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(200).send('<!doctype html><html><head><title>RazorAgent OS</title></head><body><div id="root">RazorAgent OS Live</div></body></html>');
+  }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+// Primary port 3000 ensures compatibility with the local AI Studio reverse proxy.
+const PRIMARY_PORT = 3000;
+const primaryServer = app.listen(PRIMARY_PORT, '0.0.0.0', () => {
   console.log(`\n========================================================`);
-  console.log(`🚀 [RazorAgent OS] Server live at http://localhost:${PORT}`);
-  console.log(`🌐 ACP Manifest: http://localhost:${PORT}/.well-known/agent-commerce.json`);
+  console.log(`🚀 [RazorAgent OS] Server live at http://0.0.0.0:${PRIMARY_PORT}`);
+  console.log(`🌐 ACP Manifest: http://localhost:${PRIMARY_PORT}/.well-known/agent-commerce.json`);
   console.log(`🛡️  Vulcan Sentinel: Active & Guarding Bounded Mandates`);
   console.log(`========================================================\n`);
 });
+
+primaryServer.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.log(`ℹ️ Port ${PRIMARY_PORT} in use; listening on secondary or proxy.`);
+  } else {
+    console.warn(`Primary port notice:`, err.message);
+  }
+});
+
+// Cloud Run Production Ingress Support:
+// In deployed Cloud Run environments, Cloud Run routes traffic to process.env.PORT (typically 8080).
+// Binding a listener on process.env.PORT satisfies Cloud Run container health checks.
+// In the local dev container, port 8080 is managed by nginx, so EADDRINUSE is safely handled.
+const CLOUD_RUN_PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : null;
+let cloudRunServer = null;
+if (CLOUD_RUN_PORT && CLOUD_RUN_PORT !== PRIMARY_PORT) {
+  cloudRunServer = app.listen(CLOUD_RUN_PORT, '0.0.0.0', () => {
+    console.log(`☁️  [Cloud Run Production] Ingress listener active on port ${CLOUD_RUN_PORT}`);
+  });
+  cloudRunServer.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`ℹ️ Port ${CLOUD_RUN_PORT} is already handled by proxy; port ${PRIMARY_PORT} serving.`);
+    } else {
+      console.warn(`⚠️ Cloud Run port listener note:`, err.message);
+    }
+  });
+}
+
+// Graceful termination for Cloud Run container lifecycle
+const shutdown = () => {
+  console.log('Stopping server gracefully...');
+  primaryServer.close(() => {
+    if (cloudRunServer) {
+      cloudRunServer.close(() => process.exit(0));
+    } else {
+      process.exit(0);
+    }
+  });
+};
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
+

@@ -127,8 +127,8 @@ export default function VulcanInspector({
       </div>
 
       {/* Live Cybernetic Radar HUD */}
-      <div className="rounded-2xl border border-emerald-500/25 bg-[#021510]/80 p-3 sm:p-4 shadow-2xl overflow-hidden backdrop-blur-xl">
-        <div className="flex items-center justify-between pb-2 mb-2 border-b border-emerald-950/80">
+      <div className="rounded-2xl border border-emerald-500/25 bg-[#021510]/80 p-3 sm:p-4 shadow-2xl backdrop-blur-xl">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="flex h-2.5 w-2.5 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -139,15 +139,8 @@ export default function VulcanInspector({
             </h3>
           </div>
           <span className="text-[10px] px-2 py-0.5 rounded-full font-mono-code bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-            RADAR ACTIVE (SWEEP 4s)
+            RADAR ACTIVE • ZERO-LATENCY INTERCEPT
           </span>
-        </div>
-        <div className="rounded-xl overflow-hidden border border-emerald-900/40 bg-black/40">
-          <img
-            src="/animated-sentinel-radar.svg"
-            alt="Vulcan Sentinel AI Radar Scanner Animation"
-            className="w-full h-auto max-h-[260px] object-cover object-center"
-          />
         </div>
       </div>
 
